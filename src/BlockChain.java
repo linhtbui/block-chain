@@ -23,6 +23,11 @@ public class BlockChain {
         last = first;
     }
 
+    /**
+     * @param amount The amount transacted
+     * @return A new Block
+     * @throws NoSuchAlgorithmException
+     */
     public Block mine(int amount) throws NoSuchAlgorithmException {
         return new Block(count, amount, last.value.getHash());
     }
@@ -31,6 +36,10 @@ public class BlockChain {
         return last.value.getNum() + 1;
     }
 
+    /**
+     * @param blk A block to be appended to the blockchain
+     * @throws NoSuchAlgorithmException
+     */
     public void append(Block blk) throws NoSuchAlgorithmException {
         if(blk.getPrevHash() != last.value.getHash()){
             return;
@@ -42,17 +51,19 @@ public class BlockChain {
         count++;
     }
 
+    /**
+     * @return If the last block was removed
+     */
     public boolean removeLast(){
         if(first == last){ return false; }
 
-        Node firstNode = first;
-        Node secondLastNode = null;
-        while (firstNode.nextNode != last){
-            secondLastNode = firstNode;
+        Node currentNode = first;
+        while (currentNode.nextNode != last){
+            currentNode = currentNode.nextNode;
         }
 
-        secondLastNode.nextNode = null;
-        last = secondLastNode;
+        currentNode.nextNode = null;
+        last = currentNode;
         return true;
     }
 
@@ -60,7 +71,12 @@ public class BlockChain {
         return last.value.getHash();
     }
 
+    /**
+     * @return If the blockchain contains any invalid blocks
+     * @throws NoSuchAlgorithmException
+     */
     public boolean isValidBlockChain() throws NoSuchAlgorithmException {
+
         Node currentNode = first;
         boolean result = true;
 
@@ -73,22 +89,54 @@ public class BlockChain {
             currentNode = currentNode.nextNode;
         }
 
-        return result;
+        return result && !goesBelowZero();
     }
 
+    /**
+     * Prints the final balances of Aryan and Linh after going through
+     * the whole blockchain history.
+     */
     public void printBalances(){
         int total = this.first.value.getAmount();
+        int Aryan = total, Linh = 0;
 
-        int Aryan = 0, Linh = 0;
+        if(this.first.nextNode == null){
+            System.out.printf("Aryan: %d, Linh: %d", Aryan, Linh);
+            return;
+        }
 
-        Node currentNode = this.first;
-        while (currentNode.nextNode != null){
+        Node currentNode = this.first.nextNode;
+        while (currentNode != null){
             Aryan += currentNode.value.getAmount();
+            Linh -= currentNode.value.getAmount();
             currentNode = currentNode.nextNode;
         }
-        Linh = total - Aryan;
 
         System.out.printf("Aryan: %d, Linh: %d", Aryan, Linh);
+    }
+
+    private boolean goesBelowZero(){
+        int Aryan = this.first.value.getAmount();
+        int Linh = 0;
+        boolean isInvalid = false;
+
+        if(this.first.nextNode == null){
+            return false;
+        }
+
+        Node currentNode = this.first.nextNode;
+        while (currentNode != null && !isInvalid){
+            Aryan += currentNode.value.getAmount();
+            Linh -= currentNode.value.getAmount();
+
+            if(Aryan < 0 || Linh < 0){
+                isInvalid = true;
+            }
+
+            currentNode = currentNode.nextNode;
+        }
+
+        return isInvalid;
     }
 
     public String toString(){

@@ -13,11 +13,17 @@ public class Block {
 		this.amount = amount;
 		this.prevHash = prevHash;
 
-		do{
-            this.curHash = computeHash(this.num, this.amount, this.nonce, this.prevHash);
-        } while (!this.curHash.isValid());
+		boolean valid = false;
 
-		this.nonce++;
+		while (!valid){
+            this.curHash = computeHash(this.num, this.amount, this.nonce, this.prevHash);
+
+            if(this.curHash.isValid()){
+                valid = true;
+            } else {
+                this.nonce++;
+            }
+        }
 	}
 	public Block(int num, int amount, Hash prevHash, long nonce) throws NoSuchAlgorithmException {
 		this.num = num;
@@ -25,7 +31,7 @@ public class Block {
 		this.prevHash = prevHash;
 		this.nonce = nonce;
 
-        this.curHash= computeHash(this.num, this.amount, this.nonce, this.prevHash);
+        this.curHash = computeHash(this.num, this.amount, this.nonce, this.prevHash);
 	}
 	
 	public int getNum() {
@@ -44,7 +50,15 @@ public class Block {
         return this.curHash;
 	}
 
-    public static Hash computeHash(int num, int amount, long nonce, Hash preHash) throws NoSuchAlgorithmException {
+    /**
+     * @param num The index of the block in the chain
+     * @param amount The amount transacted
+     * @param nonce An arbitrary number that can only be used once
+     * @param prevHash The hash of the previous Block in the chain
+     * @return The hash of the new Block
+     * @throws NoSuchAlgorithmException
+     */
+    public static Hash computeHash(int num, int amount, long nonce, Hash prevHash) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("sha-256");
 
         ByteBuffer byte1 = ByteBuffer.allocate(Integer.BYTES);
@@ -57,8 +71,8 @@ public class Block {
 
         md.update(byte1.array());
         md.update(byte2.array());
-        if (preHash != null) {
-            md.update(preHash.getData());
+        if (prevHash != null) {
+            md.update(prevHash.getData());
         }
         md.update(byte3.array());
 
