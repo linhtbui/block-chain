@@ -11,8 +11,7 @@ public class BlockChain {
             this.nextNode = next;
         }
     }
-
-    private int amount;
+    
     private int count = 1;
 
     public Node first;
@@ -25,7 +24,7 @@ public class BlockChain {
     }
 
     public Block mine(int amount) throws NoSuchAlgorithmException {
-        return new Block(count + 1, amount, last.value.getHash());
+        return new Block(count, amount, last.value.getHash());
     }
 
     public int getSize(){
@@ -40,6 +39,7 @@ public class BlockChain {
         Node newNode = new Node(blk, null);
         last.nextNode = newNode;
         last = newNode;
+        count++;
     }
 
     public boolean removeLast(){
@@ -91,7 +91,6 @@ public class BlockChain {
 
     public String toString(){
 
-        int cnt = 0;
         Node currentNode = first;
 
         if(currentNode == null){

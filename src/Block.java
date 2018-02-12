@@ -45,17 +45,20 @@ public class Block {
     public static Hash computeHash(int num, int amount, long nonce, Hash preHash) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("sha-256");
 
-        ByteBuffer byte1 = ByteBuffer.allocate(8);
-        ByteBuffer byte2 = ByteBuffer.allocate(8);
+        ByteBuffer byte1 = ByteBuffer.allocate(Integer.BYTES);
+        ByteBuffer byte2 = ByteBuffer.allocate(Integer.BYTES);
+        ByteBuffer byte3 = ByteBuffer.allocate(Long.BYTES);       		;
 
-        byte1.putInt(num).putInt(amount);
-        byte2.putLong(nonce);
+        byte1.putInt(num);
+        byte2.putInt(amount);
+        byte3.putLong(nonce);
 
         md.update(byte1.array());
+        md.update(byte2.array());
         if (preHash != null) {
             md.update(preHash.getData());
         }
-        md.update(byte2.array());
+        md.update(byte3.array());
 
         byte[] hash = md.digest();
 

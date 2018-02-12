@@ -16,7 +16,7 @@ public class BlockChainDriver {
         //quit: quits the program
 
         scanner = new Scanner(System.in);
-        chain = new BlockChain(0);
+        chain = new BlockChain(args[1]);
         boolean run = true;
 
         do {
