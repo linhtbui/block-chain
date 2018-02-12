@@ -16,7 +16,7 @@ public class BlockChainDriver {
         //quit: quits the program
 
         scanner = new Scanner(System.in);
-        chain = new BlockChain(args[1]);
+        chain = new BlockChain(Integer.parseInt(args[0]));
         boolean run = true;
 
         do {
@@ -24,6 +24,7 @@ public class BlockChainDriver {
             String input = scanner.nextLine().trim();
 
             switch (input) {
+                    // Maybe works
                 case "mine": mine();
                     break;
                 case "append": append();
@@ -34,14 +35,18 @@ public class BlockChainDriver {
                     break;
                 case "report": report();
                     break;
+                    // Works
                 case "help": help();
                     break;
+                    // Works
                 case "quit":
                 default: System.out.println("Exiting!");
                          run = false;
                     break;
             }
             System.out.print("\n");
+            System.out.println(chain.toString());
+
         } while (run);
     }
 
@@ -58,7 +63,7 @@ public class BlockChainDriver {
         System.out.print("Amount transferred: ");
         int amount = Integer.parseInt(scanner.nextLine());
 
-        System.out.print("\nNonce: ");
+        System.out.print("Nonce: ");
         long nonce = Long.parseLong(scanner.nextLine());
 
         Block newBlock = new Block(chain.last.value.getNum()+1, amount, chain.last.value.getHash(), nonce);

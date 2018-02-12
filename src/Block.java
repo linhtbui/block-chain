@@ -14,8 +14,10 @@ public class Block {
 		this.prevHash = prevHash;
 
 		do{
-            this.curHash = computeHash(this.num, this.amount, this.nonce, this.prevHash);			this.nonce++;
+            this.curHash = computeHash(this.num, this.amount, this.nonce, this.prevHash);
         } while (!this.curHash.isValid());
+
+		this.nonce++;
 	}
 	public Block(int num, int amount, Hash prevHash, long nonce) throws NoSuchAlgorithmException {
 		this.num = num;
@@ -65,9 +67,9 @@ public class Block {
         return new Hash(hash);
     }
 
-	public String toString() {	
+	public String toString() {
 		return String.format("Block %d (Amount: %d, Nonce: %d, prevHash: %s, hash: %s)",
-				num, amount, nonce, prevHash.toString(), curHash.toString());
+				num, amount, nonce, (prevHash == null) ? "null" : prevHash.toString(), curHash.toString());
 	}
 	
 }

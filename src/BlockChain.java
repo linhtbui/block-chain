@@ -65,10 +65,12 @@ public class BlockChain {
         boolean result = true;
 
         while (currentNode.nextNode != null){
-            if(currentNode.value.getHash() != currentNode.nextNode.value.getHash()){
+            if(currentNode.value.getHash() != currentNode.nextNode.value.getPrevHash()){
                 result = false;
                 break;
             }
+
+            currentNode = currentNode.nextNode;
         }
 
         return result;
@@ -81,7 +83,7 @@ public class BlockChain {
 
         Node currentNode = this.first;
         while (currentNode.nextNode != null){
-            Aryan +=currentNode.value.getAmount();
+            Aryan += currentNode.value.getAmount();
             currentNode = currentNode.nextNode;
         }
         Linh = total - Aryan;
@@ -90,7 +92,6 @@ public class BlockChain {
     }
 
     public String toString(){
-
         Node currentNode = first;
 
         if(currentNode == null){
