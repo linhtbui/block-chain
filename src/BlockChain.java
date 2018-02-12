@@ -5,6 +5,11 @@ public class BlockChain {
     public class Node {
         public Block value;
         public Node nextNode;
+        /**
+         * Node constructor
+         * @param value: contains the block 
+         * @param next: the next node in the linked list
+         */
 
         public Node(Block value, Node next){
             this.value = value;
@@ -16,6 +21,12 @@ public class BlockChain {
 
     public Node first;
     public Node last;
+    
+    /**
+     * BlockChain constructor
+     * @param initial: an integer: the initial amount
+     * @throws NoSuchAlgorithmException
+     */
 
     public BlockChain(int initial) throws NoSuchAlgorithmException {
         Block firstBlock = new Block(0, initial, null);
@@ -32,6 +43,10 @@ public class BlockChain {
         return new Block(count, amount, last.value.getHash());
     }
 
+    /**
+     * 
+     * @return: the size of the block chain
+     */
     public int getSize(){
         return last.value.getNum() + 1;
     }
@@ -66,7 +81,11 @@ public class BlockChain {
         last = currentNode;
         return true;
     }
-
+    /**
+     * 
+     * @return: a Hash, the hash of the last block 
+     * @throws NoSuchAlgorithmException
+     */
     public Hash getHash() throws NoSuchAlgorithmException {
         return last.value.getHash();
     }
@@ -81,12 +100,17 @@ public class BlockChain {
         boolean result = true;
 
         while (currentNode.nextNode != null){
-            if(currentNode.value.getHash() != currentNode.nextNode.value.getPrevHash()){
-                result = false;
-                break;
-            }
+        	if((currentNode.value.getHash() != currentNode.nextNode.value.getPrevHash()) || 
+        	   !currentNode.value.getHash().isValid()){
+        		result = false;
+        		break;
+        	}
 
             currentNode = currentNode.nextNode;
+        }
+        
+        if (!currentNode.value.getHash().isValid()) {
+        	result = false;
         }
 
         return result && !goesBelowZero();
@@ -114,7 +138,10 @@ public class BlockChain {
 
         System.out.printf("Aryan: %d, Linh: %d", Aryan, Linh);
     }
-
+    /**
+     * 
+     * @return: a boolean if amount goes negative
+     */
     private boolean goesBelowZero(){
         int Aryan = this.first.value.getAmount();
         int Linh = 0;
@@ -138,7 +165,9 @@ public class BlockChain {
 
         return isInvalid;
     }
-
+    /**
+     * @return: a string contains information of the whole blockchain
+     */
     public String toString(){
         Node currentNode = first;
 

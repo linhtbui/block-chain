@@ -7,7 +7,13 @@ public class Block {
 	private int num, amount;
 	private Hash prevHash, curHash;
 	private long nonce;
-	
+	/**
+	 * Block Constructor
+	 * @param num: num of block
+	 * @param amount: amount transfered
+	 * @param prevHash: Hash of previous block (if valid)
+	 * @throws NoSuchAlgorithmException: ignore exception
+	 */
 	public Block(int num, int amount, Hash prevHash) throws NoSuchAlgorithmException {
 		this.num = num;
 		this.amount = amount;
@@ -25,6 +31,14 @@ public class Block {
             }
         }
 	}
+	/**
+	 * Block constructor with nonce value param
+	 * @param num: num of block
+	 * @param amount: amount transfered
+	 * @param prevHash: Hash of previous block (if valid)
+	 * @param nonce: nonce of block 
+	 * @throws NoSuchAlgorithmException: ignore exception
+	 */
 	public Block(int num, int amount, Hash prevHash, long nonce) throws NoSuchAlgorithmException {
 		this.num = num;
 		this.amount = amount;
@@ -34,18 +48,42 @@ public class Block {
         this.curHash = computeHash(this.num, this.amount, this.nonce, this.prevHash);
 	}
 	
+	/**
+	 * 
+	 * @return: an integer, the num of block
+	 */
 	public int getNum() {
 		return this.num;
 	}
+	
+	/**
+	 * 
+	 * @return: an int, the amount transfered of block 
+	 */
 	public int getAmount() {
 		return this.amount;
 	}
+	
+	/**
+	 * 
+	 * @return: a long, the nonce of block 
+	 */
 	public long getNonce() { 
 		return this.nonce;
 	}
+	
+	/**
+	 * 
+	 * @return: a Hash, the hash of the previous block 
+	 */
 	public Hash getPrevHash() {
 		return this.prevHash;
 	}
+	/**
+	 * 
+	 * @return: a Hash, the hash of the current block 
+	 * @throws NoSuchAlgorithmException
+	 */
 	public Hash getHash() throws NoSuchAlgorithmException {
         return this.curHash;
 	}
@@ -80,7 +118,10 @@ public class Block {
 
         return new Hash(hash);
     }
-
+    
+    /**
+     * @return: a string that contains information of the block 
+     */
 	public String toString() {
 		return String.format("Block %d (Amount: %d, Nonce: %d, prevHash: %s, hash: %s)",
 				num, amount, nonce, (prevHash == null) ? "null" : prevHash.toString(), curHash.toString());

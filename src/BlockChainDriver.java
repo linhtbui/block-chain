@@ -18,9 +18,10 @@ public class BlockChainDriver {
         scanner = new Scanner(System.in);
         chain = new BlockChain(Integer.parseInt(args[0]));
         boolean run = true;
-
+        
+        System.out.println(chain.toString());
         do {
-            System.out.print("Enter your command: ");
+            System.out.print("Command? ");
             String input = scanner.nextLine().trim();
 
             switch (input) {
@@ -40,9 +41,12 @@ public class BlockChainDriver {
                     break;
                     // Works
                 case "quit":
-                default: System.out.println("Exiting!");
-                         run = false;
-                    break;
+                	System.out.println("Exiting!");
+                	run = false;
+                	return;
+                default: 
+                	System.out.println("Invalid command!");
+                    continue;
             }
             System.out.print("\n");
             System.out.println(chain.toString());
@@ -51,6 +55,10 @@ public class BlockChainDriver {
     }
 
     // Commands
+    /**
+     * Mine a new block
+     * @throws NoSuchAlgorithmException
+     */
     private static void mine() throws NoSuchAlgorithmException {
         System.out.print("Amount transferred: ");
         int amount = Integer.parseInt(scanner.nextLine());
@@ -59,6 +67,10 @@ public class BlockChainDriver {
         System.out.println(String.format("\namount = %d, nonce = %d",
                 minedBlock.getAmount(), minedBlock.getNonce()));
     }
+    /**
+     * Append the block to the blockchain
+     * @throws NoSuchAlgorithmException
+     */
     private static void append() throws NoSuchAlgorithmException {
         System.out.print("Amount transferred: ");
         int amount = Integer.parseInt(scanner.nextLine());
@@ -78,9 +90,10 @@ public class BlockChainDriver {
     private static void report(){
         chain.printBalances();
     }
+    
     private static void help(){
         System.out.print(
-                "\nAvailable Commands: -"
+                "Valid commands: -"
                 + "\nmine: discovers the nonce for a given transaction"
                 + "\nappend: appends a new block onto the end of the chain"
                 + "\nremove: removes the last block from the end of the chain"
